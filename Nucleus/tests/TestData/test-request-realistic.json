@@ -1,0 +1,24 @@
+{
+  "workflowId": "summarization-workflow-001",
+  "workflowName": "Document Summarization",
+  "platform": "n8n",
+  "executionId": "exec-456",
+  "sessionId": "session-789",
+  "triggeredBy": "webhook",
+  "mode": "production",
+  "nodeId": "openai-summarize",
+  "task": 1,
+  "modelName": "gpt-4",
+  "modelProvider": "openai",
+  "promptVersion": "v1.0",
+  "inputData": {
+    "originalText": "Artificial Intelligence (AI) has revolutionized the way we approach problem-solving and automation. Machine learning algorithms can now process vast amounts of data to identify patterns and make predictions with remarkable accuracy. Deep learning, a subset of AI, uses neural networks with multiple layers to solve complex problems in areas such as image recognition, natural language processing, and autonomous systems. The integration of AI into various industries has led to significant improvements in efficiency, cost reduction, and innovation. However, it also raises important questions about ethics, privacy, and the future of human work.",
+    "maxLength": 100,
+    "style": "concise"
+  },
+  "outputData": {
+    "summary": "AI revolutionizes problem-solving through machine learning and deep learning, improving efficiency across industries while raising ethical concerns about privacy and employment.",
+    "wordCount": 25,
+    "confidence": 0.92
+  }
+} 

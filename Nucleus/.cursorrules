@@ -1,0 +1,79 @@
+# Nucleus Project Intelligence
+
+## Project Overview
+Nucleus is an ASP.NET Core application that provides observability and evaluation for AI-enabled automation workflows. It integrates with n8n, Make, and Power Automate to automatically evaluate AI outputs and trigger human feedback when needed.
+
+## Core Functionality
+- **Single API Endpoint**: `/api/evaluate` for all workflow platforms
+- **LLM Evaluation**: OpenAI GPT integration for automatic scoring (0-5 scale)
+- **Database Schema**: Three core tables (workflow_run, model_run, evaluation)
+- **Human Feedback**: Trigger notifications when score < 3.5 threshold
+- **Multi-Platform Support**: n8n, Make, Power Automate integration
+
+## Architecture Patterns
+- **Clean Architecture**: Dependencies point inward toward Domain layer (see [architecture.md](docs/architecture.md))
+- **Strategy Pattern**: Different evaluator types (LLM, human, rule)
+- **Repository Pattern**: Data access abstraction for PostgreSQL
+- **Dependency Injection**: Loose coupling between layers
+
+## Technology Stack
+- ASP.NET Core with Entity Framework Core
+- PostgreSQL with JSONB for flexible data storage
+- OpenAI GPT API for LLM evaluation
+- JWT authentication (for dashboard access)
+- FluentValidation and AutoMapper
+
+## Database Schema
+- **workflow_run**: Tracks workflow executions with external IDs
+- **model_run**: Records AI model executions with input/output data
+- **evaluation**: Stores evaluation results with scores and feedback
+
+## Development Guidelines
+- Always maintain layer separation (Domain → Application → Interface/Infrastructure)
+- Use UUID primary keys with external reference fields
+- Implement proper validation for API inputs
+- Handle OpenAI API rate limits and errors
+- Use JSONB for flexible payload storage
+- Follow the single endpoint design pattern
+
+## File Organization
+- **Domain**: Core entities (workflow_run, model_run, evaluation)
+- **Application**: Evaluation use cases, LLM integration, orchestration
+- **Interface**: `/api/evaluate` controller, DTOs, validation
+- **Infrastructure**: PostgreSQL context, OpenAI API integration
+
+## Common Patterns
+- Use strategy pattern for different evaluator types
+- Implement repository interfaces in Domain layer
+- Use DTOs for API communication with external platforms
+- Apply validation at Interface layer with FluentValidation
+- Use AutoMapper for object mapping between layers
+
+## Integration Patterns
+- **n8n**: HTTP Request Node with JSON templates
+- **Make**: HTTP webhook integration
+- **Power Automate**: HTTP trigger integration
+- **OpenAI**: HTTP client with retry logic and rate limiting
+
+## Testing Strategy
+- Unit tests for Domain and Application layers
+- Integration tests for Infrastructure layer (database, OpenAI API)
+- API tests for `/api/evaluate` endpoint
+- Mock external dependencies (OpenAI API, workflow platforms)
+
+## Memory Bank
+- Always read memory bank files at start of each session
+- Update documentation after significant changes
+- Use memory bank for context and decision tracking
+- Follow the three-phase roadmap (Foundation → Integration → Observability)
+
+# Database Connection String Rule
+- Never write database connection strings to appsettings.json or appsettings.Development.json.
+- Always keep connection strings in a .env file.
+- Copy C:\Users\charl\source\repos\workos\Nucleus\.env.example to any project that needs a connection string.
+
+# Terminal Command Rules
+- NEVER use && in terminal commands due to shell compatibility issues
+- Use separate commands or semicolons (;) instead of &&
+- Always run commands one at a time to avoid shell parsing issues
+- Use proper directory navigation with cd commands separately 

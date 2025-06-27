@@ -1,0 +1,22 @@
+{
+  "workflowId": "test-workflow-001",
+  "workflowName": "Test Summarization",
+  "platform": "n8n",
+  "executionId": "exec-123",
+  "sessionId": "session-456",
+  "triggeredBy": "manual",
+  "mode": "test",
+  "nodeId": "openai-summarize",
+  "task": 1,
+  "modelName": "gpt-4",
+  "modelProvider": "openai",
+  "promptVersion": "v1.0",
+  "inputData": {
+    "originalText": "This is a long document that needs to be summarized into a concise version.",
+    "maxLength": 50
+  },
+  "outputData": {
+    "summary": "Document needs summarization.",
+    "wordCount": 4
+  }
+} 

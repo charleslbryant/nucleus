@@ -1,0 +1,68 @@
+# Visual Studio IDE specific files
+.vs/
+
+# Node.js / Vue.js
+node_modules/
+/dist/
+/coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env.local
+.env.*.local
+
+## Ignore Visual Studio temporary files, build results, and configuration files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Ignore build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+## Ignore Visual Studio Generated files
+Generated\\ Files/
+
+## Ignore MSTest test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## Ignore NUnit test results
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+## Ignore Local History files
+_ReSharper*/
+*.resharper
+$RECYCLE.BIN/
+
+## Ignore Mac specific files
+.DS_Store
+
+## Ignore Windows specific files
+Thumbs.db
+
+## Ignore Rider files
+.idea/
+
+## Ignore project-specific files
+memory-bank/
+data/
+.env 
+
+# IDE/Tool specific files
+test_run_logs.txt 
+.github/copilot-instructions.md 

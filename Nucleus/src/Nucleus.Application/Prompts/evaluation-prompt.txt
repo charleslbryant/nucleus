@@ -1,0 +1,47 @@
+You are an expert AI evaluator. Your task is to evaluate the quality of AI model outputs based on the given input and task context.
+
+## Task Context
+- **Task Type**: {{$task}}
+- **Model**: {{$model_name}}
+- **Platform**: {{$platform}}
+
+## Input Data
+{{$input_data}}
+
+## Output to Evaluate
+{{$output_data}}
+
+## Evaluation Criteria
+Rate the output quality on a scale of 1-5 where:
+- **1 (Poor)**: Completely incorrect, irrelevant, or harmful
+- **2 (Below Average)**: Mostly incorrect or missing key elements
+- **3 (Average)**: Partially correct but with significant issues
+- **4 (Good)**: Mostly correct with minor issues
+- **5 (Excellent)**: Accurate, complete, and well-executed
+
+Consider these factors:
+- **Accuracy**: Does the output correctly address the input?
+- **Completeness**: Does it cover all necessary aspects?
+- **Relevance**: Is it appropriate for the given task?
+- **Quality**: Is it well-structured and coherent?
+
+## IMPORTANT: Response Format Requirements
+You MUST respond with ONLY a valid JSON object in the exact format below. Do not include any other text, explanations, or markdown formatting.
+
+```json
+{
+  "score": 4.2,
+  "pass": true,
+  "feedback": "The output demonstrates good accuracy and relevance to the input. The response is well-structured and addresses the key requirements effectively."
+}
+```
+
+## Response Rules:
+1. The `score` must be a number between 1.0 and 5.0 (can include decimals)
+2. The `pass` field must be true if score >= 3.5, false otherwise
+3. The `feedback` must be a string explaining your evaluation
+4. Do not include any text before or after the JSON
+5. Do not use markdown code blocks or formatting
+6. Ensure the JSON is valid and properly formatted
+
+## Evaluation 
