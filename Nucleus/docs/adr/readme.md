@@ -1,11 +1,11 @@
 # Architecture Decision Records (ADRs)
 
 ## Purpose
-Architecture Decision Records (ADRs) document significant architectural decisions made during the development of Nucleus. Each ADR captures the context, decision, consequences, and rationale for important technical choices that shape the system's architecture.
+Architecture Decision Records (ADRs) document significant architectural decisions made during the development of a project. Each ADR captures the context, decision, consequences, and rationale for important technical choices that shape the system's architecture.
 
 ## Structure
 - Each ADR is a standalone markdown file in this directory.
-- ADRs are numbered sequentially (ADR-001, ADR-002, etc.).
+- ADRs are numbered sequentially with 4 digits (ADR-0001, ADR-0002, etc.).
 - Each ADR follows a consistent template format.
 - ADRs are immutable once accepted - new decisions create new ADRs.
 
@@ -27,11 +27,11 @@ Architecture Decision Records (ADRs) document significant architectural decision
 - [Technical Context](../../memory-bank/techContext.md)
 
 ## Current ADRs
-- [ADR-001: Clean Architecture Pattern](ADR-001-clean-architecture.md)
-- [ADR-002: ASP.NET Core Framework](ADR-002-aspnet-core.md)
-- [ADR-003: PostgreSQL with JSONB](ADR-003-postgresql-jsonb.md)
-- [ADR-004: Semantic Kernel for LLM Integration](ADR-004-semantic-kernel.md)
-- [ADR-005: n8n Integration Strategy](ADR-005-n8n-integration.md)
-- [ADR-006: Single API Endpoint Design](ADR-006-single-api-endpoint.md)
-- [ADR-007: CQRS Pattern Implementation](ADR-007-cqrs-pattern.md)
-- [ADR-008: Entity Framework Core](ADR-008-entity-framework.md) 
+- [ADR-0001: Clean Architecture Pattern](ADR-0001-clean-architecture.md)
+- [ADR-0002: ASP.NET Core Framework](ADR-0002-aspnet-core.md)
+- [ADR-0003: PostgreSQL with JSONB](ADR-0003-postgresql-jsonb.md)
+- [ADR-0004: Semantic Kernel for LLM Integration](ADR-0004-semantic-kernel.md)
+- [ADR-0005: n8n Integration Strategy](ADR-0005-n8n-integration.md)
+- [ADR-0006: Single API Endpoint Design](ADR-0006-single-api-endpoint.md)
+- [ADR-0007: CQRS Pattern Implementation](ADR-0007-cqrs-pattern.md)
+- [ADR-0008: Entity Framework Core](ADR-0008-entity-framework.md) 

@@ -1,4 +1,4 @@
-# ADR-XXX: [Title]
+# ADR-XXXX: [Title]
 
 ## Status
 **Accepted** | Proposed | Deprecated | Superseded
