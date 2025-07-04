@@ -76,4 +76,32 @@ Nucleus is an ASP.NET Core application that provides observability and evaluatio
 - NEVER use && in terminal commands due to shell compatibility issues
 - Use separate commands or semicolons (;) instead of &&
 - Always run commands one at a time to avoid shell parsing issues
-- Use proper directory navigation with cd commands separately 
+- Use proper directory navigation with cd commands separately
+
+# Product Management Process for Nucleus
+
+## Artifacts
+- **PRDs (Product Requirement Documents):** Define feature requirements, user problems, jobs-to-be-done, and user journeys. One PRD per feature, stored in `docs/roadmap/product-requirements/`.
+- **Roadmap:** Prioritizes PRDs into Now, Next, and Future buckets. Single file in `docs/roadmap/roadmap.md`.
+- **CRDs (Change Request Documents):** Break down "Now" PRDs into actionable tasks for implementation. One CRD per active PRD, stored in `docs/roadmap/change-requests/`.
+- **Task Logs:** Daily logs of all tasks, grouped by status (in progress, on hold, to do, done, cancelled), stored in `docs/tasks/`.
+
+## Workflow
+1. **Session Start:**
+   - Review the memory bank.
+   - Review the roadmap, current PRD(s), CRDs for active PRDs, and today's task log.
+   - If no task log for today, copy the last log to today.
+   - Determine the next task with the operator.
+   - Create a plan in chat.
+2. **Execution:**
+   - Work with the operator to execute the plan, updating task log, CRD, and PRD as needed.
+3. **Recap (on completion or request):**
+   - Review what was done in the session.
+   - Update task log, CRD, and PRD as necessary.
+   - Stage changes (git add), check status, write commit message, commit, push, and create a pull request.
+
+## Principles
+- All requirements and tasks are traceable from PRD → CRD → Task Log.
+- Only PRDs in the "Now" bucket get CRDs and active tasks.
+- All changes are documented and linked for full traceability.
+- The .cursorrules file is updated as the process evolves. 
