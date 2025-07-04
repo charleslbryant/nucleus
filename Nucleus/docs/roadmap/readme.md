@@ -1,7 +1,7 @@
 # Nucleus Product Roadmap
 
 ## Purpose
-The roadmap organizes and prioritizes all Product Requirement Documents (PRDs) for Nucleus. It provides a clear, time-bucketed plan for delivering value to users by grouping features into "Now", "Next", and "Future" buckets.
+The roadmap organizes and prioritizes all Product Requirement Documents (PRDs). It provides a clear, time-bucketed plan for delivering value to users by grouping features into "Now", "Next", and "Future" buckets.
 
 ## Structure
 - The roadmap is a single markdown file in this directory.
