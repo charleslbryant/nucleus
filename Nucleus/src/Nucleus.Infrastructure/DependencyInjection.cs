@@ -64,6 +64,7 @@ public static class DependencyInjection
         services.AddScoped<IModelRunRepository, ModelRunRepository>();
         services.AddScoped<IEvaluationRepository, EvaluationRepository>();
         services.AddScoped<IEvaluationCriteriaRepository, EvaluationCriteriaRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

@@ -23,6 +23,12 @@ public static class DependencyInjection
         services.AddSingleton<IOpenAIConfiguration, OpenAIConfiguration>();
         services.AddScoped<INotificationService, NotificationService>();
 
+        // Register authentication services
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IDataSeeder, DataSeeder>();
+
         // Register validators explicitly
         services.AddTransient<IValidator<EvaluateModelRunCommand>, EvaluateModelRunCommandValidator>();
 

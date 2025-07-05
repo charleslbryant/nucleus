@@ -1,38 +1,41 @@
-# Issue #121: Human Feedback System
+# Issue #5: Human Feedback System
 
 ## Overview
-Implement a notification system that triggers human feedback when AI evaluation scores fall below a configurable threshold.
+Implement a human feedback system for Nucleus to allow manual review and feedback on low-scoring evaluations.
 
 ## Linked PRD
 - [Human Feedback System](../roadmap/product-requirements/PRD-human-feedback-system.md)
-- **Parent PRD**: [Nucleus Evaluate API Endpoint](#100)
+- **Parent PRD**: [Admin Dashboard](#6)
 
 ## Acceptance Criteria
-- [x] NotificationService interface and implementation
-- [x] Slack and email notification support
-- [x] Configurable threshold (3.5) in appsettings.json
-- [x] Integration with evaluation workflow
-- [x] Testing with low-score evaluations
-- [x] Verification of notification triggers
+- [ ] Notification system for low-score evaluations
+- [ ] Manual review interface in admin dashboard
+- [ ] Feedback loop integration
+- [ ] Slack/email notification support
+- [ ] Configurable feedback threshold
+- [ ] Audit logging for feedback events
+- [ ] Integration with evaluation workflow
 
 ## Implementation Tasks
-### Done
-- [x] Implement INotificationService interface
-- [x] Create NotificationService with Slack and email support
-- [x] Add notification configuration to appsettings.json
-- [x] Integrate notification service into evaluation workflow
-- [x] Add human feedback threshold (3.5) configuration
-- [x] Test notification system with low-score evaluations
-- [x] Verify notification triggers when score < 3.5
+### In Progress
+- [ ] Human feedback system implementation
+
+### To Do
+- [ ] Implement notification service
+- [ ] Build manual review interface
+- [ ] Integrate feedback loop
+- [ ] Add Slack/email support
+- [ ] Configure feedback threshold
+- [ ] Implement audit logging
+- [ ] Integrate with evaluation workflow
 
 ## Dependencies
-- Nucleus Evaluate API Endpoint (#120)
-- OpenAI Integration (#119)
+- Admin Dashboard Implementation (#6)
 
 ## Notes
-- Successfully implemented and tested
-- Notifications trigger correctly when evaluation scores are below 3.5
-- System is production-ready
+- Human feedback is critical for quality assurance
+- Should support both Slack and email notifications
+- Feedback events must be logged for audit purposes
 
 ## Related Links
 - [CRD Document](../roadmap/change-requests/CRD-human-feedback-system.md)
@@ -41,5 +44,7 @@ Implement a notification system that triggers human feedback when AI evaluation 
 ## Labels
 - `epic`
 - `crd`
-- `completed`
-- `phase-2` 
+- `in-progress`
+- `phase-2`
+- `quality`
+- `high-priority` 

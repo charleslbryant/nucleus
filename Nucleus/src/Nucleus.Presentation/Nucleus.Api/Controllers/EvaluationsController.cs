@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Nucleus.Application.Features.GetEvaluationHistory;
@@ -7,6 +8,7 @@ namespace Nucleus.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class EvaluationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -20,6 +22,8 @@ public class EvaluationsController : ControllerBase
     /// Get all evaluations with optional filtering
     /// </summary>
     [HttpGet]
+    [ProducesResponseType(typeof(List<EvaluationHistoryItem>), 200)]
+    [ProducesResponseType(401)]
     public async Task<ActionResult<List<EvaluationHistoryItem>>> GetEvaluations(
         [FromQuery] string? platform = null,
         [FromQuery] string? workflow = null,
@@ -59,6 +63,9 @@ public class EvaluationsController : ControllerBase
     /// Get a specific evaluation by ID
     /// </summary>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(EvaluationHistoryItem), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult<EvaluationHistoryItem>> GetEvaluation(Guid id)
     {
         var query = new GetEvaluationHistoryQuery
@@ -81,6 +88,8 @@ public class EvaluationsController : ControllerBase
     /// Get evaluation statistics
     /// </summary>
     [HttpGet("stats")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(401)]
     public async Task<ActionResult<object>> GetStats()
     {
         var query = new GetEvaluationHistoryQuery

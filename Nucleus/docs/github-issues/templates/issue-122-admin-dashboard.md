@@ -1,55 +1,46 @@
-# Issue #122: Admin Dashboard Implementation
+# Issue #6: Admin Dashboard Implementation
 
 ## Overview
-Build a modern, responsive admin dashboard for monitoring AI workflow evaluations, score trends, and system performance. Built with Vue.js 3, Tailwind CSS, and integrated with the Nucleus API.
+Implement a modern admin dashboard for Nucleus with real-time evaluation metrics, advanced filtering, and user management.
 
 ## Linked PRD
 - [Admin Dashboard](../roadmap/product-requirements/PRD-admin-dashboard.md)
-- **Parent PRD**: [Admin Dashboard](#102)
+- **Parent PRD**: [Admin Dashboard](#3)
 
 ## Acceptance Criteria
-- [x] Vue.js 3 frontend with Composition API
-- [x] Tailwind CSS responsive design
-- [x] Pinia state management
-- [x] Dashboard overview with metrics and charts
-- [x] Evaluation management with filtering and search
-- [x] Export functionality (CSV/JSON)
-- [x] Settings management panel
-- [x] API integration with backend
-- [x] Mobile-friendly responsive design
-- [x] Development environment configuration
+- [ ] Responsive Vue.js 3 dashboard UI
+- [ ] Real-time evaluation metrics and charts
+- [ ] Advanced filtering and search
+- [ ] User management interface
+- [ ] Settings management panel
+- [ ] API integration for evaluation data
+- [ ] Export functionality (CSV/JSON)
+- [ ] Error handling and loading states
+- [ ] Mobile-friendly design
+- [ ] Integration with authentication system
 
 ## Implementation Tasks
-### Done
-- [x] Initialize Vue.js 3 project with Vite
-- [x] Configure Tailwind CSS with custom design system
-- [x] Set up Pinia for state management
-- [x] Implement Vue Router for navigation
-- [x] Add Chart.js for data visualization
-- [x] Configure Vite proxy for development API communication
-- [x] Create EvaluationsController with filtering endpoints
-- [x] Add statistics and data retrieval endpoints
-- [x] Implement proper error handling and validation
-- [x] Configure CORS for frontend-backend communication
-- [x] Fix HTTPS redirect issues in development environment
-- [x] Build responsive layout with sidebar navigation
-- [x] Create dashboard overview with stats cards
-- [x] Implement evaluation table with sorting and filtering
-- [x] Add score distribution charts and recent activity feed
-- [x] Create evaluation detail views
-- [x] Build settings panel with configuration options
-- [x] Add export functionality (CSV/JSON)
+### In Progress
+- [ ] Admin dashboard implementation
+
+### To Do
+- [ ] Build dashboard overview
+- [ ] Implement evaluation table
+- [ ] Add score distribution charts
+- [ ] Create settings panel
+- [ ] Integrate with API endpoints
+- [ ] Add export functionality
+- [ ] Implement user management
+- [ ] Integrate authentication system
 
 ## Dependencies
-- Nucleus Evaluate API Endpoint (#120)
-- Human Feedback System (#121)
+- Nucleus Evaluate API Endpoint (#100)
+- Authentication System (#8)
 
 ## Notes
-- Admin dashboard is production-ready with modern UI/UX
-- All API integration issues resolved and working correctly
-- Frontend architecture is scalable and maintainable
-- Complete observability layer for AI workflow evaluations
-- Running at http://localhost:3000 with full functionality
+- Dashboard is the main interface for monitoring and managing evaluations
+- Should support real-time updates and advanced analytics
+- User management and authentication integration are required
 
 ## Related Links
 - [CRD Document](../roadmap/change-requests/CRD-admin-dashboard.md)
@@ -58,6 +49,7 @@ Build a modern, responsive admin dashboard for monitoring AI workflow evaluation
 ## Labels
 - `epic`
 - `crd`
-- `completed`
+- `in-progress`
 - `phase-3`
-- `frontend` 
+- `frontend`
+- `high-priority` 

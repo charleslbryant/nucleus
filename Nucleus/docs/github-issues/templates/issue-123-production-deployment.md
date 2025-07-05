@@ -1,11 +1,11 @@
-# Issue #123: Production Deployment Configuration
+# Issue #7: Production Deployment Configuration
 
 ## Overview
 Configure and deploy Nucleus to production environment with proper authentication, monitoring, and security settings.
 
 ## Linked PRD
 - [Production Deployment](../roadmap/product-requirements/PRD-production-deployment.md)
-- **Parent PRD**: [Production Deployment](#103)
+- **Parent PRD**: [Production Deployment](#4)
 
 ## Acceptance Criteria
 - [ ] Configure production environment (Docker, Kubernetes, or cloud platform)
@@ -37,8 +37,8 @@ Configure and deploy Nucleus to production environment with proper authenticatio
 - [ ] Load testing and validation
 
 ## Dependencies
-- Admin Dashboard Implementation (#122)
-- Authentication System (#124)
+- Admin Dashboard Implementation (#6)
+- Authentication System (#8)
 
 ## Notes
 - Current development environment is stable and ready for production
