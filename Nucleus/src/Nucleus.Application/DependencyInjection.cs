@@ -21,6 +21,7 @@ public static class DependencyInjection
         // Register application services
         services.AddScoped<IEvaluationService, EvaluationService>();
         services.AddSingleton<IOpenAIConfiguration, OpenAIConfiguration>();
+        services.AddScoped<INotificationService, NotificationService>();
 
         // Register validators explicitly
         services.AddTransient<IValidator<EvaluateModelRunCommand>, EvaluateModelRunCommandValidator>();

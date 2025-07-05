@@ -1,0 +1,22 @@
+{
+  "workflowId": "test-workflow-002",
+  "workflowName": "Test Poor Quality Output",
+  "platform": "n8n",
+  "executionId": "exec-456",
+  "sessionId": "session-789",
+  "triggeredBy": "manual",
+  "mode": "test",
+  "nodeId": "openai-summarize",
+  "task": 1,
+  "modelName": "gpt-4",
+  "modelProvider": "openai",
+  "promptVersion": "v1.0",
+  "inputData": {
+    "originalText": "This is a comprehensive document about artificial intelligence and machine learning that contains detailed information about neural networks, deep learning algorithms, and their applications in various industries including healthcare, finance, and autonomous vehicles. The document discusses the evolution of AI from simple rule-based systems to complex neural networks and the challenges faced in implementing these technologies in real-world scenarios.",
+    "maxLength": 100
+  },
+  "outputData": {
+    "summary": "AI stuff.",
+    "wordCount": 2
+  }
+} 

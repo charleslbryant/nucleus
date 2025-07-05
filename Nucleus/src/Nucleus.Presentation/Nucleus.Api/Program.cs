@@ -4,6 +4,7 @@ using Nucleus.Application;
 using Nucleus.Infrastructure;
 using Nucleus.Api.DTOs;
 using Nucleus.Application.Features.EvaluateModelRun;
+using Nucleus.Application.Services;
 
 // Load environment variables from .env file
 var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
@@ -39,6 +40,13 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Configure notification services
+builder.Services.Configure<NotificationConfiguration>(
+    builder.Configuration.GetSection(NotificationConfiguration.SectionName));
+
+// Add HTTP client for notifications
+builder.Services.AddHttpClient<INotificationService, NotificationService>();
+
 // Add FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<EvaluateModelRunCommandValidator>();
@@ -68,8 +76,10 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nucleus Evaluation API v1");
     });
 }
-
-app.UseHttpsRedirection();
+else
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowAll");
 

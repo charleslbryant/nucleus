@@ -1,0 +1,310 @@
+{
+  "name": "Outlook Email Summarization with Nucleus Evaluation",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "getAll",
+        "folderId": "INBOX",
+        "returnAll": false,
+        "limit": 1,
+        "additionalFields": {
+          "select": "subject,body,from,toRecipients,receivedDateTime"
+        }
+      },
+      "id": "microsoft-graph-trigger",
+      "name": "📧 Microsoft Graph Trigger",
+      "type": "n8n-nodes-base.microsoftGraph",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "microsoft-graph-email-trigger",
+      "color": "#0078D4",
+      "notes": "Triggers when new email arrives in Outlook inbox via Microsoft Graph API"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "completion",
+        "model": "gpt-4",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are an email summarization assistant. Create concise, professional summaries that capture key points and action items. Focus on clarity and actionable insights."
+          },
+          {
+            "role": "user",
+            "content": "Please summarize this email:\n\nSubject: {{$json.subject}}\nFrom: {{$json.from.emailAddress.address}}\nDate: {{$json.receivedDateTime}}\n\nBody:\n{{$json.body.content}}\n\nProvide a summary in 150 words or less, and list any action items if present."
+          }
+        ],
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 300
+        }
+      },
+      "id": "openai-summarize",
+      "name": "🤖 OpenAI Summarize Email",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "color": "#10A37F",
+      "notes": "Uses GPT-4 to generate professional email summaries"
+    },
+    {
+      "parameters": {
+        "url": "https://localhost:7001/api/evaluate",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "workflowId": "outlook-summarization-001",
+          "workflowName": "Outlook Email Summarization",
+          "platform": "n8n",
+          "executionId": "={{$json.executionId || $now.toISOString()}}",
+          "sessionId": "={{$json.sessionId || $now.toISOString()}}",
+          "triggeredBy": "email-trigger",
+          "mode": "production",
+          "nodeId": "openai-summarize-email",
+          "task": 1,
+          "modelName": "gpt-4",
+          "modelProvider": "openai",
+          "promptVersion": "v1.0",
+          "inputData": {
+            "emailSubject": "={{$('📧 Microsoft Graph Trigger').item.json.subject}}",
+            "emailBody": "={{$('📧 Microsoft Graph Trigger').item.json.body.content}}",
+            "sender": "={{$('📧 Microsoft Graph Trigger').item.json.from.emailAddress.address}}",
+            "recipients": "={{$('📧 Microsoft Graph Trigger').item.json.toRecipients}}",
+            "emailDate": "={{$('📧 Microsoft Graph Trigger').item.json.receivedDateTime}}",
+            "maxLength": 150,
+            "includeActionItems": true,
+            "tone": "professional"
+          },
+          "outputData": {
+            "summary": "={{$('🤖 OpenAI Summarize Email').item.json.choices[0].message.content}}",
+            "wordCount": "={{$('🤖 OpenAI Summarize Email').item.json.usage.totalTokens}}",
+            "processingTime": "={{$now.toISOString()}}"
+          }
+        }
+      },
+      "id": "nucleus-evaluation",
+      "name": "🔍 Nucleus Evaluation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300],
+      "color": "#6366F1",
+      "notes": "Evaluates AI summary quality using Nucleus API"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition1",
+              "leftValue": "={{$json.score}}",
+              "rightValue": 3.5,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "quality-check",
+      "name": "⚖️ Quality Check (Score >= 3.5)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "color": "#F59E0B",
+      "notes": "Routes workflow based on evaluation score"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "update",
+        "messageId": "={{$('📧 Microsoft Graph Trigger').item.json.id}}",
+        "updateFields": {
+          "categories": ["Processed", "Summarized"]
+        }
+      },
+      "id": "mark-processed",
+      "name": "✅ Mark Email as Processed",
+      "type": "n8n-nodes-base.microsoftGraph",
+      "typeVersion": 1,
+      "position": [1120, 200],
+      "color": "#059669",
+      "notes": "Marks email as processed in Outlook"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "toRecipients": "team@company.com",
+        "subject": "Email Summary - {{$('📧 Microsoft Graph Trigger').item.json.subject}}",
+        "body": "**Original Email:**\nFrom: {{$('📧 Microsoft Graph Trigger').item.json.from.emailAddress.address}}\nSubject: {{$('📧 Microsoft Graph Trigger').item.json.subject}}\n\n**AI Summary:**\n{{$('🤖 OpenAI Summarize Email').item.json.choices[0].message.content}}\n\n**Evaluation Score:** {{$('🔍 Nucleus Evaluation').item.json.score}}/5.0\n**Feedback:** {{$('🔍 Nucleus Evaluation').item.json.feedback}}"
+      },
+      "id": "send-summary",
+      "name": "📤 Send Summary to Team",
+      "type": "n8n-nodes-base.microsoftGraph",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "color": "#059669",
+      "notes": "Sends high-quality summary to team"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "toRecipients": "reviewer@company.com",
+        "subject": "⚠️ Low Quality Summary - Manual Review Required",
+        "body": "**Original Email:**\nFrom: {{$('📧 Microsoft Graph Trigger').item.json.from.emailAddress.address}}\nSubject: {{$('📧 Microsoft Graph Trigger').item.json.subject}}\n\n**AI Summary (Low Quality):**\n{{$('🤖 OpenAI Summarize Email').item.json.choices[0].message.content}}\n\n**Evaluation Score:** {{$('🔍 Nucleus Evaluation').item.json.score}}/5.0\n**Feedback:** {{$('🔍 Nucleus Evaluation').item.json.feedback}}\n\n**Action Required:** Please review and provide manual summary."
+      },
+      "id": "notify-reviewer",
+      "name": "🚨 Notify Human Reviewer",
+      "type": "n8n-nodes-base.microsoftGraph",
+      "typeVersion": 1,
+      "position": [1120, 400],
+      "color": "#DC2626",
+      "notes": "Notifies reviewer for low-quality summaries"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "📧 Microsoft Graph Trigger": {
+      "main": [
+        [
+          {
+            "node": "🤖 OpenAI Summarize Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖 OpenAI Summarize Email": {
+      "main": [
+        [
+          {
+            "node": "🔍 Nucleus Evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔍 Nucleus Evaluation": {
+      "main": [
+        [
+          {
+            "node": "⚖️ Quality Check (Score >= 3.5)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚖️ Quality Check (Score >= 3.5)": {
+      "main": [
+        [
+          {
+            "node": "✅ Mark Email as Processed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📤 Send Summary to Team",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚨 Notify Human Reviewer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "outlook-email-summarization",
+  "tags": [
+    {
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z",
+      "id": "nucleus-evaluation",
+      "name": "Nucleus"
+    },
+    {
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z",
+      "id": "email-automation",
+      "name": "Email Automation"
+    }
+  ],
+  "groups": [
+    {
+      "id": "trigger-group",
+      "name": "📧 Email Trigger",
+      "position": [140, 200],
+      "size": [200, 200],
+      "color": "#E3F2FD",
+      "notes": "Handles email triggering from Microsoft Graph"
+    },
+    {
+      "id": "ai-processing-group",
+      "name": "🤖 AI Processing",
+      "position": [360, 200],
+      "size": [200, 200],
+      "color": "#E8F5E8",
+      "notes": "AI-powered email summarization"
+    },
+    {
+      "id": "evaluation-group",
+      "name": "🔍 Quality Evaluation",
+      "position": [580, 200],
+      "size": [200, 200],
+      "color": "#F3E5F5",
+      "notes": "Nucleus quality evaluation and routing"
+    },
+    {
+      "id": "success-group",
+      "name": "✅ Success Actions",
+      "position": [800, 100],
+      "size": [200, 150],
+      "color": "#E8F5E8",
+      "notes": "Actions for high-quality summaries"
+    },
+    {
+      "id": "review-group",
+      "name": "🚨 Review Actions",
+      "position": [800, 350],
+      "size": [200, 150],
+      "color": "#FFEBEE",
+      "notes": "Actions for low-quality summaries requiring review"
+    }
+  ],
+  "nodeGroups": {
+    "microsoft-graph-trigger": "trigger-group",
+    "openai-summarize": "ai-processing-group",
+    "nucleus-evaluation": "evaluation-group",
+    "quality-check": "evaluation-group",
+    "mark-processed": "success-group",
+    "send-summary": "success-group",
+    "notify-reviewer": "review-group"
+  }
+} 

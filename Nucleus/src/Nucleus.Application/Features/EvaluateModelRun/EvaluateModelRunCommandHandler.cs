@@ -14,6 +14,7 @@ public class EvaluateModelRunCommandHandler(
     IModelRunRepository modelRunRepository,
     IEvaluationRepository evaluationRepository,
     IEvaluationService evaluationService,
+    INotificationService notificationService,
     ILogger<EvaluateModelRunCommandHandler> logger)
     : IRequestHandler<EvaluateModelRunCommand, EvaluateModelRunResponse>
 {
@@ -21,6 +22,7 @@ public class EvaluateModelRunCommandHandler(
     private readonly IModelRunRepository _modelRunRepository = modelRunRepository;
     private readonly IEvaluationRepository _evaluationRepository = evaluationRepository;
     private readonly IEvaluationService _evaluationService = evaluationService;
+    private readonly INotificationService _notificationService = notificationService;
     private readonly ILogger<EvaluateModelRunCommandHandler> _logger = logger;
 
     /// <summary>
@@ -47,7 +49,10 @@ public class EvaluateModelRunCommandHandler(
             // Step 3: Perform evaluation
             var evaluation = await PerformEvaluationAsync(request, modelRun.Id, cancellationToken);
 
-            // Step 4: Update workflow run as successful
+            // Step 4: Trigger human feedback notification if score is low
+            await TriggerHumanFeedbackNotificationAsync(evaluation, workflowRun, modelRun, cancellationToken);
+
+            // Step 5: Update workflow run as successful
             workflowRun.CompleteSuccessfully(DateTime.UtcNow);
             await _workflowRunRepository.UpdateAsync(workflowRun, cancellationToken);
 
@@ -158,5 +163,46 @@ public class EvaluateModelRunCommandHandler(
             createdEvaluation.Id, evaluationResult.Score, modelRunId);
 
         return createdEvaluation;
+    }
+
+    private async Task TriggerHumanFeedbackNotificationAsync(
+        Evaluation evaluation,
+        WorkflowRun workflowRun,
+        ModelRun modelRun,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (_notificationService.ShouldTriggerHumanFeedback(evaluation.Score))
+            {
+                _logger.LogInformation("Triggering human feedback notification for evaluation {EvaluationId} with score {Score}",
+                    evaluation.Id, evaluation.Score);
+
+                var notificationSent = await _notificationService.SendHumanFeedbackNotificationAsync(
+                    evaluation, workflowRun, modelRun, cancellationToken);
+
+                if (notificationSent)
+                {
+                    _logger.LogInformation("Human feedback notification sent successfully for evaluation {EvaluationId}",
+                        evaluation.Id);
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to send human feedback notification for evaluation {EvaluationId}",
+                        evaluation.Id);
+                }
+            }
+            else
+            {
+                _logger.LogDebug("No human feedback notification needed for evaluation {EvaluationId} with score {Score}",
+                    evaluation.Id, evaluation.Score);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error triggering human feedback notification for evaluation {EvaluationId}",
+                evaluation.Id);
+            // Don't throw - notification failure shouldn't break the evaluation flow
+        }
     }
 } 

@@ -1,16 +1,16 @@
 # PRD: Nucleus Evaluate API Endpoint
 
 ## Overview
-A single API endpoint (`/api/evaluate`) for capturing, logging, and evaluating AI node executions from external workflow platforms (n8n, Make, Power Automate).
+A single API endpoint (`/api/evaluate`) for capturing, logging, and evaluating AI executions from external systems (n8n, Make, Power Automate, enterprise systems). There are many tools that can do this, but we are building to fine tune AI for AgenticOps.
 
 ## Jobs-to-be-Done
-- Workflow developers need to evaluate AI outputs automatically
-- Operations teams want to monitor AI node quality
-- Business users want reliable, high-quality AI automation
+- AI Engineers need to evaluate AI outputs automatically
+- Operators and operations teams want to monitor AI node quality
+- Business users want reliable, high-quality AI solutions
 
 ## User Journey
-1. User configures a workflow with an AI node
-2. Workflow sends output to `/api/evaluate`
+1. User configures an Agentic workflow with digital, data, IoT, and AI nodes
+2. Agentic workflow sends output to `/api/evaluate`
 3. Nucleus logs the execution and evaluates output using LLM
 4. If score is low, triggers human feedback
 5. User reviews results in dashboard

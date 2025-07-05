@@ -1,4 +1,4 @@
-# PRD: [Feature Name]
+# PRD-XXXX: [Feature Name]
 
 ## Overview
 Brief summary of the feature and the user problem it solves.

@@ -1,0 +1,273 @@
+{
+  "name": "Simple Nucleus Integration Test",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "manual"
+      },
+      "id": "manual-trigger",
+      "name": "🔘 Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "color": "#000000",
+      "notes": "Manual trigger for testing Nucleus integration"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "completion",
+        "model": "gpt-4",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are an email summarization assistant. Create concise, professional summaries that capture key points and action items. Focus on clarity and actionable insights."
+          },
+          {
+            "role": "user",
+            "content": "Please summarize this email:\n\nSubject: Q4 Sales Report - Excellent Results\nFrom: ceo@company.com\nDate: 2024-01-15\n\nBody:\nTeam, I'm pleased to share our Q4 sales results. We achieved 125% of our target with $2.3M in revenue. Key highlights: 1) New product line contributed 40% of sales, 2) Customer retention improved to 95%, 3) We expanded into 3 new markets. Next steps: 1) Plan Q1 strategy meeting, 2) Prepare investor presentation, 3) Review bonus allocations. Great work everyone!\n\nProvide a summary in 150 words or less, and list any action items if present."
+          }
+        ],
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 300
+        }
+      },
+      "id": "openai-summarize",
+      "name": "🤖 OpenAI Summarize Email",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "color": "#10A37F",
+      "notes": "Uses GPT-4 to generate professional email summaries"
+    },
+    {
+      "parameters": {
+        "url": "https://localhost:7001/api/evaluate",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "workflowId": "simple-test-001",
+          "workflowName": "Simple Nucleus Integration Test",
+          "platform": "n8n",
+          "executionId": "={{$now.toISOString()}}",
+          "sessionId": "={{$now.toISOString()}}",
+          "triggeredBy": "manual",
+          "mode": "test",
+          "nodeId": "openai-summarize-test",
+          "task": 1,
+          "modelName": "gpt-4",
+          "modelProvider": "openai",
+          "promptVersion": "v1.0",
+          "inputData": {
+            "emailSubject": "Q4 Sales Report - Excellent Results",
+            "emailBody": "Team, I'm pleased to share our Q4 sales results. We achieved 125% of our target with $2.3M in revenue. Key highlights: 1) New product line contributed 40% of sales, 2) Customer retention improved to 95%, 3) We expanded into 3 new markets. Next steps: 1) Plan Q1 strategy meeting, 2) Prepare investor presentation, 3) Review bonus allocations. Great work everyone!",
+            "sender": "ceo@company.com",
+            "recipients": "team@company.com",
+            "emailDate": "2024-01-15T10:00:00Z",
+            "maxLength": 150,
+            "includeActionItems": true,
+            "tone": "professional"
+          },
+          "outputData": {
+            "summary": "={{$('🤖 OpenAI Summarize Email').item.json.choices[0].message.content}}",
+            "wordCount": "={{$('🤖 OpenAI Summarize Email').item.json.usage.totalTokens}}",
+            "processingTime": "={{$now.toISOString()}}"
+          }
+        }
+      },
+      "id": "nucleus-evaluation",
+      "name": "🔍 Nucleus Evaluation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300],
+      "color": "#6366F1",
+      "notes": "Evaluates AI summary quality using Nucleus API"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition1",
+              "leftValue": "={{$json.score}}",
+              "rightValue": 3.5,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "quality-check",
+      "name": "⚖️ Quality Check (Score >= 3.5)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "color": "#F59E0B",
+      "notes": "Routes workflow based on evaluation score"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"success\",\n  \"message\": \"High quality summary generated\",\n  \"score\": \"{{$('🔍 Nucleus Evaluation').item.json.score}}\",\n  \"feedback\": \"{{$('🔍 Nucleus Evaluation').item.json.feedback}}\",\n  \"summary\": \"{{$('🤖 OpenAI Summarize Email').item.json.choices[0].message.content}}\"\n}"
+      },
+      "id": "success-response",
+      "name": "✅ Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 200],
+      "color": "#059669",
+      "notes": "Returns success response for high-quality summaries"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"review_required\",\n  \"message\": \"Low quality summary - manual review needed\",\n  \"score\": \"{{$('🔍 Nucleus Evaluation').item.json.score}}\",\n  \"feedback\": \"{{$('🔍 Nucleus Evaluation').item.json.feedback}}\",\n  \"summary\": \"{{$('🤖 OpenAI Summarize Email').item.json.choices[0].message.content}}\"\n}"
+      },
+      "id": "review-response",
+      "name": "🚨 Review Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 400],
+      "color": "#DC2626",
+      "notes": "Returns review response for low-quality summaries"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "🔘 Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "🤖 OpenAI Summarize Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖 OpenAI Summarize Email": {
+      "main": [
+        [
+          {
+            "node": "🔍 Nucleus Evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔍 Nucleus Evaluation": {
+      "main": [
+        [
+          {
+            "node": "⚖️ Quality Check (Score >= 3.5)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚖️ Quality Check (Score >= 3.5)": {
+      "main": [
+        [
+          {
+            "node": "✅ Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚨 Review Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "simple-nucleus-test",
+  "tags": [
+    {
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z",
+      "id": "nucleus-evaluation",
+      "name": "Nucleus"
+    },
+    {
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z",
+      "id": "testing",
+      "name": "Testing"
+    }
+  ],
+  "groups": [
+    {
+      "id": "trigger-group",
+      "name": "🔘 Manual Trigger",
+      "position": [140, 200],
+      "size": [200, 200],
+      "color": "#E3F2FD",
+      "notes": "Manual trigger for testing"
+    },
+    {
+      "id": "ai-processing-group",
+      "name": "🤖 AI Processing",
+      "position": [360, 200],
+      "size": [200, 200],
+      "color": "#E8F5E8",
+      "notes": "AI-powered email summarization"
+    },
+    {
+      "id": "evaluation-group",
+      "name": "🔍 Quality Evaluation",
+      "position": [580, 200],
+      "size": [200, 200],
+      "color": "#F3E5F5",
+      "notes": "Nucleus quality evaluation and routing"
+    },
+    {
+      "id": "success-group",
+      "name": "✅ Success Actions",
+      "position": [800, 100],
+      "size": [200, 150],
+      "color": "#E8F5E8",
+      "notes": "Actions for high-quality summaries"
+    },
+    {
+      "id": "review-group",
+      "name": "🚨 Review Actions",
+      "position": [800, 350],
+      "size": [200, 150],
+      "color": "#FFEBEE",
+      "notes": "Actions for low-quality summaries requiring review"
+    }
+  ],
+  "nodeGroups": {
+    "manual-trigger": "trigger-group",
+    "openai-summarize": "ai-processing-group",
+    "nucleus-evaluation": "evaluation-group",
+    "quality-check": "evaluation-group",
+    "success-response": "success-group",
+    "review-response": "review-group"
+  }
+} 

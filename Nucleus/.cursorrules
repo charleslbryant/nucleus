@@ -1,14 +1,68 @@
-# Nucleus Project Intelligence
+# Rules
 
-## Project Overview
-Nucleus is an ASP.NET Core application that provides observability and evaluation for AI-enabled automation workflows. It integrates with n8n, Make, and Power Automate to automatically evaluate AI outputs and trigger human feedback when needed.
+## Workflow
+1. **Session Start (trigger: "let's go"):**
+   - Review the memory bank (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md).
+   - Review the roadmap, current PRD(s), CRDs for active PRDs, and today's task log.
+   - **Task Log Protocol**: Check if today's task log exists in `docs/tasks/tasklog-YYYY-MM-DD.md`.
+     - If no task log for today exists, create a new one using the template.
+     - Move all incomplete tasks (In Progress, On Hold, To Do) from the previous task log to today's task log.
+     - Keep completed tasks in the previous log's "Done" section.
+   - Determine the next task with the operator.
+   - Create a plan in chat.
+2. **Execution:**
+   - Work with the operator to execute the plan, updating task log, CRD, and PRD as needed.
+3. **Recap Protocol (trigger: "recap"):**
+   - **Review Memory Bank**: Read all memory bank files (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md) to understand current state
+   - **Git Status**: Run `git status` to see all changes made during the session
+   - **Write Recap Summary**: Create a comprehensive summary of what was accomplished, including:
+     - Features implemented
+     - Technical challenges solved
+     - Architecture decisions made
+     - Current system status
+     - Next steps identified
+   - **Update Task Log**: Move completed tasks to "Done" section, update status of in-progress tasks
+   - **Update Documentation**: 
+     - Update CRDs with completed implementation details
+     - Update PRDs with any requirement changes or clarifications
+     - Update roadmap.md if priorities or timelines changed
+   - **Write ADRs**: Create Architecture Decision Records (ADRs) for any significant technical decisions made:
+     - Use template from `docs/adr/ADR-template.md`
+     - Document the decision, context, consequences, and alternatives considered
+     - Store in `docs/adr/` with sequential numbering
+   - **Update Memory Bank**: 
+     - Update activeContext.md with current focus and recent changes
+     - Update progress.md with completed work and current status
+     - Update systemPatterns.md if new patterns emerged
+     - Update techContext.md if technology choices changed
+   - **Git Operations**:
+     - Run `git add .` to stage all changes
+     - Write descriptive commit message following conventional commits format
+     - Run `git commit -m "commit message"`
+   - **Remote Operations**:
+     - If remote exists, run `git push origin main` (or current branch)
+     - Create pull request with detailed description of changes
+     - Link related PRDs, CRDs, and ADRs in PR description
 
-## Core Functionality
-- **Single API Endpoint**: `/api/evaluate` for all workflow platforms
-- **LLM Evaluation**: OpenAI GPT integration for automatic scoring (0-5 scale)
-- **Database Schema**: Three core tables (workflow_run, model_run, evaluation)
-- **Human Feedback**: Trigger notifications when score < 3.5 threshold
-- **Multi-Platform Support**: n8n, Make, Power Automate integration
+## Memory Bank
+- Always read memory bank files at start of each session
+- Update documentation after significant changes
+- Use memory bank for context and decision tracking
+
+## Product Management Process
+
+### Artifacts
+- **PRDs (Product Requirement Documents):** Define feature requirements, user problems, jobs-to-be-done, and user journeys. One PRD per feature, stored in `docs/roadmap/product-requirements/`.
+- **Roadmap:** Prioritizes PRDs into Now, Next, and Future buckets. Single file in `docs/roadmap/roadmap.md`.
+- **CRDs (Change Request Documents):** Break down "Now" PRDs into actionable tasks for implementation. One CRD per active PRD, stored in `docs/roadmap/change-requests/`.
+- **Task Logs:** Keep daily logs of all tasks, grouped by status (in progress, on hold, to do, done, cancelled), stored in `docs/tasks/`.
+- **ADRs (Architecture Decision Records):** Document significant technical decisions with context, consequences, and alternatives. Stored in `docs/adr/` with sequential numbering.
+
+### Principles
+- All requirements and tasks are traceable through PRD, CRD, and Task Log.
+- Only PRDs in the "Now" bucket get CRDs and active tasks.
+- All changes are documented and linked for full traceability.
+- The .cursorrules file is updated as the process evolves. 
 
 ## Architecture Patterns
 - **Clean Architecture**: Dependencies point inward toward Domain layer (see [architecture.md](docs/architecture.md))
@@ -22,6 +76,9 @@ Nucleus is an ASP.NET Core application that provides observability and evaluatio
 - OpenAI GPT API for LLM evaluation
 - JWT authentication (for dashboard access)
 - FluentValidation and AutoMapper
+- Vue.js 3 with Tailwind CSS for admin dashboard
+- Pinia for state management
+- Chart.js for data visualization
 
 ## Database Schema
 - **workflow_run**: Tracks workflow executions with external IDs
@@ -35,12 +92,15 @@ Nucleus is an ASP.NET Core application that provides observability and evaluatio
 - Handle OpenAI API rate limits and errors
 - Use JSONB for flexible payload storage
 - Follow the single endpoint design pattern
+- Use Vite proxy for frontend-backend communication in development
+- Disable HTTPS redirect in development environment
 
-## File Organization
+## Source (src) File Organization
 - **Domain**: Core entities (workflow_run, model_run, evaluation)
 - **Application**: Evaluation use cases, LLM integration, orchestration
 - **Interface**: `/api/evaluate` controller, DTOs, validation
 - **Infrastructure**: PostgreSQL context, OpenAI API integration
+- **Presentation**: Vue.js admin dashboard with API integration
 
 ## Common Patterns
 - Use strategy pattern for different evaluator types
@@ -48,60 +108,26 @@ Nucleus is an ASP.NET Core application that provides observability and evaluatio
 - Use DTOs for API communication with external platforms
 - Apply validation at Interface layer with FluentValidation
 - Use AutoMapper for object mapping between layers
-
-## Integration Patterns
-- **n8n**: HTTP Request Node with JSON templates
-- **Make**: HTTP webhook integration
-- **Power Automate**: HTTP trigger integration
-- **OpenAI**: HTTP client with retry logic and rate limiting
+- Use primary constructor in C# classes when possible
+- Use Pinia stores for frontend state management
+- Implement responsive design with Tailwind CSS
 
 ## Testing Strategy
 - Unit tests for Domain and Application layers
 - Integration tests for Infrastructure layer (database, OpenAI API)
-- API tests for `/api/evaluate` endpoint
+- .http API tests for endpoint
 - Mock external dependencies (OpenAI API, workflow platforms)
-
-## Memory Bank
-- Always read memory bank files at start of each session
-- Update documentation after significant changes
-- Use memory bank for context and decision tracking
-- Follow the three-phase roadmap (Foundation → Integration → Observability)
+- Frontend component testing with Vue Test Utils
 
 # Database Connection String Rule
 - Never write database connection strings to appsettings.json or appsettings.Development.json.
 - Always keep connection strings in a .env file.
-- Copy C:\Users\charl\source\repos\workos\Nucleus\.env.example to any project that needs a connection string.
+- Copy \.env.example to any project that needs a connection string.
 
 # Terminal Command Rules
 - NEVER use && in terminal commands due to shell compatibility issues
 - Use separate commands or semicolons (;) instead of &&
 - Always run commands one at a time to avoid shell parsing issues
 - Use proper directory navigation with cd commands separately
-
-# Product Management Process for Nucleus
-
-## Artifacts
-- **PRDs (Product Requirement Documents):** Define feature requirements, user problems, jobs-to-be-done, and user journeys. One PRD per feature, stored in `docs/roadmap/product-requirements/`.
-- **Roadmap:** Prioritizes PRDs into Now, Next, and Future buckets. Single file in `docs/roadmap/roadmap.md`.
-- **CRDs (Change Request Documents):** Break down "Now" PRDs into actionable tasks for implementation. One CRD per active PRD, stored in `docs/roadmap/change-requests/`.
-- **Task Logs:** Daily logs of all tasks, grouped by status (in progress, on hold, to do, done, cancelled), stored in `docs/tasks/`.
-
-## Workflow
-1. **Session Start:**
-   - Review the memory bank.
-   - Review the roadmap, current PRD(s), CRDs for active PRDs, and today's task log.
-   - If no task log for today, copy the last log to today.
-   - Determine the next task with the operator.
-   - Create a plan in chat.
-2. **Execution:**
-   - Work with the operator to execute the plan, updating task log, CRD, and PRD as needed.
-3. **Recap (on completion or request):**
-   - Review what was done in the session.
-   - Update task log, CRD, and PRD as necessary.
-   - Stage changes (git add), check status, write commit message, commit, push, and create a pull request.
-
-## Principles
-- All requirements and tasks are traceable from PRD → CRD → Task Log.
-- Only PRDs in the "Now" bucket get CRDs and active tasks.
-- All changes are documented and linked for full traceability.
-- The .cursorrules file is updated as the process evolves. 
+- ALWAYS get current date and time from terminal using `date` command before writing dates or times to files or documentation
+- Never assume or guess dates - always verify with terminal first
