@@ -40,7 +40,9 @@
      - Write descriptive commit message following conventional commits format
      - Run `git commit -m "commit message"`
    - **Remote Operations**:
-     - If remote exists, run `git push origin main` (or current branch)
+     - If remote exists, run `git pull` to sync with remote changes first
+     - Resolve any merge conflicts if they occur
+     - Run `git push origin main` (or current branch)
      - Create pull request with detailed description of changes
      - Link related PRDs, CRDs, and ADRs in PR description
 
