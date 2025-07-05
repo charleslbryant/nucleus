@@ -95,11 +95,12 @@ Implement a **Finalizer mode** that provides a systematic approach to completing
 - Push feature branch: `git push origin {current-branch}`
 
 #### 7. Pull Request Creation
-- Create pull request with detailed description
+- Use GitHub CLI to automatically create pull request: `gh pr create --title "[issue-{number}] {description}" --body "{detailed-description}" --base main --head {current-branch} --label {appropriate-labels} --web`
 - Include branch name in PR title: `[issue-{number}] {description}`
 - Link all related GitHub Issues in PR description
 - Add appropriate labels and assignees
 - Include implementation summary and testing notes
+- Open PR in browser for final review and submission
 
 #### 8. Personal Task Log Updates
 - Move completed tasks to "Done" section

@@ -43,11 +43,12 @@
 - [ ] Push branch: `git push origin {branch}`
 
 ### 7. Pull Request Creation
-- [ ] Create PR with detailed description
+- [ ] Use GitHub CLI: `gh pr create --title "[issue-{number}] {description}" --body "{description}" --base main --head {current-branch} --label {labels} --web`
 - [ ] Title format: `[issue-{number}] {description}`
 - [ ] Link all related issues
 - [ ] Add labels and assignees
 - [ ] Include testing notes
+- [ ] Open PR in browser for final review
 
 ### 8. Personal Task Log Updates
 - [ ] Move completed tasks to "Done"
@@ -121,6 +122,9 @@ git push origin {branch-name}
 
 # Force push (after squash)
 git push origin {branch-name} --force-with-lease
+
+# Create PR with GitHub CLI
+gh pr create --title "[issue-{number}] {description}" --body "{description}" --base main --head {current-branch} --label {labels} --web
 ```
 
 ## Success Checklist

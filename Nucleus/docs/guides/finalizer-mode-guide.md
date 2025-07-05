@@ -172,11 +172,12 @@ Closes #8
 **Purpose:** Submit changes for team review
 
 **Actions:**
-- Create pull request with detailed description
+- Use GitHub CLI to automatically create pull request: `gh pr create --title "[issue-{number}] {description}" --body "{detailed-description}" --base main --head {current-branch} --label {appropriate-labels} --web`
 - Include branch name in PR title: `[issue-{number}] {description}`
 - Link all related GitHub Issues in PR description
 - Add appropriate labels and assignees
 - Include implementation summary and testing notes
+- Open PR in browser for final review and submission
 
 **PR Template:**
 ```markdown
@@ -359,11 +360,12 @@ When the user says "finalize" or "finish", start a conversational review process
 - Push feature branch: `git push origin {current-branch}`
 
 **Step 7: Pull Request Creation**
-- Create pull request with detailed description
+- Use GitHub CLI to automatically create pull request: `gh pr create --title "[issue-{number}] {description}" --body "{detailed-description}" --base main --head {current-branch} --label {appropriate-labels} --web`
 - Include branch name in PR title: `[issue-{number}] {description}`
 - Link all related GitHub Issues in PR description using `#issue-number`
 - Add appropriate labels and assignees
 - Include implementation summary and testing notes
+- Open PR in browser for final review and submission
 
 **Step 8: Personal Task Log Updates**
 - Move completed tasks to "Done" section

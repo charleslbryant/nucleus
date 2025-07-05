@@ -232,11 +232,12 @@ After completing the Initiator session kickoff workflow, always switch Cursor fr
        - Force push the squashed branch: `git push origin {current-branch} --force-with-lease`
      - Run `git push origin {current-branch}` (use current feature branch)
    - **Pull Request Creation**:
-     - Create pull request with detailed description of changes
+     - Use GitHub CLI to automatically create pull request: `gh pr create --title "[issue-{number}] {description}" --body "{detailed-description}" --base main --head {current-branch} --label {appropriate-labels} --web`
      - Include branch name in PR title: `[issue-{number}] {description}`
      - Link all related GitHub Issues in PR description using `#issue-number`
      - Add appropriate labels and assignees
      - Include implementation summary and testing notes
+     - Open PR in browser for final review and submission
    - **Personal Task Log Updates**:
      - Move completed tasks to "Done" section
      - Update status of in-progress tasks
