@@ -9,6 +9,12 @@
      - Move all incomplete tasks (In Progress, On Hold, To Do) from the previous task log to today's task log.
      - Keep completed tasks in the previous log's "Done" section.
      - Always link personal tasks to GitHub Issues using `#issue-number`.
+   - **Branch Creation Protocol**: When starting work on a task:
+     - Check GitHub Issues for the task number
+     - Create feature branch: `feature/issue-{number}-{description}`
+     - Example: `feature/issue-123-production-deployment`
+     - Example: `feature/issue-124-authentication-system`
+     - Link branch to GitHub Issue in commits and PRs
    - Determine the next task with the operator.
    - Create a plan in chat.
 2. **Execution:**
@@ -44,9 +50,10 @@
    - **Remote Operations**:
      - If remote exists, run `git pull` to sync with remote changes first
      - Resolve any merge conflicts if they occur
-     - Run `git push origin main` (or current branch)
+     - Run `git push origin {current-branch}` (use current feature branch)
      - Create pull request with detailed description of changes
-     - Link related GitHub Issues in PR description
+     - Link related GitHub Issues in PR description using `#issue-number`
+     - Include branch name in PR title: `[issue-{number}] {description}`
 
 ## Memory Bank
 - Always read memory bank files at start of each session
