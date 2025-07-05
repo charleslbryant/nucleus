@@ -2,17 +2,17 @@
 
 ## Purpose
 
-**Nucleus** is a lightweight observability and evaluation layer for AI-enabled automation workflows. It integrates with tools like **n8n**, **Make**, or **Power Automate** to:
+**Nucleus** is a lightweight observability and evaluation layer for AgenticOPS AI-enabled automation workflows. It integrates with tools like **n8n**, **Make**, **Power Automate**, or custom systems to:
 
--   Capture and log AI node executions
--   Automatically evaluate outputs using an LLM
+-   Capture and log node executions
+-   Automatically evaluate outputs using an LLM as judge
 -   Optionally trigger human feedback (via IM/email message)
 -   Provide actionable insights for monitoring and improving workflows
 
 ## Goals
 
-1.  Track AI node performance within external workflows
-2.  Score and log the quality of model outputs automatically
+1.  Track node performance within external workflows
+2.  Score and log the quality of outputs automatically
 3.  Trigger manual review when output quality is low
 4.  Use a single API endpoint and a reusable HTTP node pattern
 5.  Use clean schema, internal PKs, and allow multi-platform compatibility
