@@ -8,6 +8,12 @@
           </div>
         </div>
         <div class="flex items-center space-x-4">
+          <!-- User info -->
+          <div class="flex items-center space-x-2 text-sm text-gray-600">
+            <span>{{ user?.username }}</span>
+            <span class="px-2 py-1 text-xs bg-gray-100 rounded-full">{{ user?.role }}</span>
+          </div>
+
           <!-- Notifications -->
           <button
             type="button"
@@ -28,7 +34,7 @@
               >
                 <span class="sr-only">Open user menu</span>
                 <div class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center">
-                  <span class="text-sm font-medium text-white">A</span>
+                  <span class="text-sm font-medium text-white">{{ userInitials }}</span>
                 </div>
               </button>
             </div>
@@ -38,12 +44,10 @@
               v-if="profileMenuOpen"
               class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
             >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Your Profile
-              </a>
+              <div class="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                <div class="font-medium">{{ user?.username }}</div>
+                <div class="text-gray-500">{{ user?.role }}</div>
+              </div>
               <router-link
                 to="/settings"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -51,12 +55,12 @@
               >
                 Settings
               </router-link>
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              <button
+                @click="handleLogout"
+                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Sign out
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -67,21 +71,40 @@
 
 <script>
 import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../../stores/auth'
 
 export default {
   name: 'Header',
   setup() {
     const route = useRoute()
+    const router = useRouter()
+    const authStore = useAuthStore()
     const profileMenuOpen = ref(false)
     
     const pageTitle = computed(() => {
       return route.meta.title || 'Admin Dashboard'
     })
 
+    const user = computed(() => authStore.user)
+
+    const userInitials = computed(() => {
+      if (!user.value?.username) return 'U'
+      return user.value.username.charAt(0).toUpperCase()
+    })
+
+    const handleLogout = () => {
+      authStore.logout()
+      profileMenuOpen.value = false
+      router.push('/login')
+    }
+
     return {
       pageTitle,
-      profileMenuOpen
+      profileMenuOpen,
+      user,
+      userInitials,
+      handleLogout
     }
   }
 }

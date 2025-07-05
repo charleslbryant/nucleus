@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nucleus.Api.DTOs;
 using Nucleus.Application.Features.EvaluateModelRun;
@@ -12,6 +13,7 @@ namespace Nucleus.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class EvaluateController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -31,10 +33,12 @@ public class EvaluateController : ControllerBase
     /// <returns>Evaluation results including score, pass/fail status, and feedback.</returns>
     /// <response code="200">Evaluation completed successfully.</response>
     /// <response code="400">Invalid request data.</response>
+    /// <response code="401">Unauthorized - authentication required.</response>
     /// <response code="500">Internal server error during evaluation.</response>
     [HttpPost]
     [ProducesResponseType(typeof(Nucleus.Api.DTOs.EvaluateModelRunResponse), 200)]
     [ProducesResponseType(typeof(ProblemDetails), 400)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(typeof(ProblemDetails), 500)]
     public async Task<ActionResult<Nucleus.Api.DTOs.EvaluateModelRunResponse>> EvaluateModelRun(
         [FromBody] EvaluateModelRunRequest request,
@@ -127,6 +131,7 @@ public class EvaluateController : ControllerBase
     /// </summary>
     /// <returns>Service status information.</returns>
     [HttpGet("health")]
+    [AllowAnonymous] // Allow anonymous access to health check
     [ProducesResponseType(typeof(object), 200)]
     public ActionResult<object> Health()
     {

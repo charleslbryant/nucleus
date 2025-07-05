@@ -178,3 +178,81 @@
 - **Never push directly to `main`.**
 - All changes must be made in a feature branch and merged to `main` via a pull request.
 - This ensures code review, CI checks, and traceability for every change.
+
+# Session Kickoff Handoff Rule
+After completing the Initiator session kickoff workflow, always switch Cursor from Initiator mode to the appropriate working mode (Plan, Act, or Code) before starting any implementation.
+
+# Finalizer Mode (trigger: "finalize" or "finish")
+4. **Finalizer Protocol (trigger: "finalize" or "finish"):**
+   - **Memory Bank Review**: Read all memory bank files (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md) to understand current state
+   - **Task and Implementation Review**: 
+     - Review current task and implementation plans
+     - Verify all requirements have been met
+     - Check for any incomplete or partially implemented features
+     - Validate against original task objectives
+   - **Git Status and Change Recap**: 
+     - Run `git status` to see all changes made during the session
+     - Review staged and unstaged changes
+     - Create comprehensive summary of modifications
+     - Identify any files that shouldn't be committed
+   - **Documentation Updates**:
+     - **GitHub Issues Updates**: 
+       - Update PRD issues with any requirement changes or clarifications
+       - Update CRD issues with completed implementation details and acceptance criteria
+       - Update personal task issues with status changes, add progress comments, close completed issues
+       - Ensure all changes are properly linked to relevant issues using `#issue-number`
+     - **Architecture Decision Records (ADRs)**: 
+       - Create new ADRs for any significant architectural changes made
+       - Use template from `docs/adr/ADR-template.md`
+       - Document the decision, context, consequences, and alternatives considered
+       - Store in `docs/adr/` with sequential numbering
+     - **User and Development Guides**: 
+       - Update user guides for any new features or changed workflows
+       - Update development guides for new patterns or technical decisions
+       - Ensure documentation reflects current implementation state
+   - **Memory Bank Updates**: 
+     - Update activeContext.md with current focus and recent changes
+     - Update progress.md with completed work and current status
+     - Update systemPatterns.md if new patterns emerged
+     - Update techContext.md if technology choices changed
+   - **Git Operations**:
+     - Run `git add .` to stage all changes
+     - Write comprehensive commit message following conventional commits format
+     - Include issue references: `#issue-number`
+     - **Commit Strategy**: 
+       - During development: Commit often with descriptive messages
+       - Before PR: Squash commits to one comprehensive commit per feature
+       - Exception: Keep commits separate if they represent distinct logical changes that should be reviewed separately
+   - **Remote Operations**:
+     - If remote exists, run `git pull origin main` to sync with remote changes first
+     - Resolve any merge conflicts if they occur
+     - **Squash Commits**: Before creating PR, squash all commits in the feature branch to one commit
+       - Use `git rebase -i HEAD~{number-of-commits}` to squash commits
+       - Write a comprehensive commit message that describes the entire feature
+       - Force push the squashed branch: `git push origin {current-branch} --force-with-lease`
+     - Run `git push origin {current-branch}` (use current feature branch)
+   - **Pull Request Creation**:
+     - Use GitHub CLI to automatically create pull request: `gh pr create --title "[issue-{number}] {description}" --body "{detailed-description}" --base main --head {current-branch} --label {appropriate-labels} --web`
+     - Include branch name in PR title: `[issue-{number}] {description}`
+     - Link all related GitHub Issues in PR description using `#issue-number`
+     - Add appropriate labels and assignees
+     - Include implementation summary and testing notes
+     - Open PR in browser for final review and submission
+   - **Personal Task Log Updates**:
+     - Move completed tasks to "Done" section
+     - Update status of in-progress tasks
+     - Add completion notes and lessons learned
+     - Link to GitHub Issues and PRs
+   - **Quality Assurance**:
+     - Verify all tests pass
+     - Check for any linting or code quality issues
+     - Review for security concerns
+     - Validate against project standards
+   - **Handoff Preparation**:
+     - Identify next priority tasks
+     - Update task status in personal tasklog
+     - Prepare context for next development session
+     - Document any known issues or technical debt
+
+# Finalizer Mode Handoff Rule
+After completing the Finalizer workflow, switch Cursor from Finalizer mode to the appropriate working mode (Plan, Act, or Code) before starting any new implementation work.
