@@ -3,15 +3,22 @@
 ## Workflow
 1. **Session Start (trigger: "let's go"):**
    - Review the memory bank (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md).
-   - Review the roadmap, current PRD(s), CRDs for active PRDs, and today's task log.
-   - **Task Log Protocol**: Check if today's task log exists in `docs/tasks/tasklog-YYYY-MM-DD.md`.
+   - Review GitHub Issues: Check current PRDs (#100-#103), CRDs (#121-#124), and personal tasks (#125-#128).
+   - **Personal Task Log Protocol**: Check if today's task log exists in `docs/tasks/personal/{username}/tasklog-YYYY-MM-DD.md`.
      - If no task log for today exists, create a new one using the template.
      - Move all incomplete tasks (In Progress, On Hold, To Do) from the previous task log to today's task log.
      - Keep completed tasks in the previous log's "Done" section.
+     - Always link personal tasks to GitHub Issues using `#issue-number`.
+   - **Branch Creation Protocol**: When starting work on a task:
+     - Check GitHub Issues for the task number
+     - Create feature branch: `feature/issue-{number}-{description}`
+     - Example: `feature/issue-123-production-deployment`
+     - Example: `feature/issue-124-authentication-system`
+     - Link branch to GitHub Issue in commits and PRs
    - Determine the next task with the operator.
    - Create a plan in chat.
 2. **Execution:**
-   - Work with the operator to execute the plan, updating task log, CRD, and PRD as needed.
+   - Work with the operator to execute the plan, updating personal task log and GitHub Issues as needed.
 3. **Recap Protocol (trigger: "recap"):**
    - **Review Memory Bank**: Read all memory bank files (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md) to understand current state
    - **Git Status**: Run `git status` to see all changes made during the session
@@ -21,11 +28,12 @@
      - Architecture decisions made
      - Current system status
      - Next steps identified
-   - **Update Task Log**: Move completed tasks to "Done" section, update status of in-progress tasks
-   - **Update Documentation**: 
-     - Update CRDs with completed implementation details
-     - Update PRDs with any requirement changes or clarifications
-     - Update roadmap.md if priorities or timelines changed
+   - **Update Personal Task Log**: Move completed tasks to "Done" section, update status of in-progress tasks
+   - **Update GitHub Issues**: 
+     - Update CRD issues with completed implementation details
+     - Update PRD issues with any requirement changes or clarifications
+     - Close completed issues or update status
+     - Add comments to issues with progress updates
    - **Write ADRs**: Create Architecture Decision Records (ADRs) for any significant technical decisions made:
      - Use template from `docs/adr/ADR-template.md`
      - Document the decision, context, consequences, and alternatives considered
@@ -40,9 +48,12 @@
      - Write descriptive commit message following conventional commits format
      - Run `git commit -m "commit message"`
    - **Remote Operations**:
-     - If remote exists, run `git push origin main` (or current branch)
+     - If remote exists, run `git pull` to sync with remote changes first
+     - Resolve any merge conflicts if they occur
+     - Run `git push origin {current-branch}` (use current feature branch)
      - Create pull request with detailed description of changes
-     - Link related PRDs, CRDs, and ADRs in PR description
+     - Link related GitHub Issues in PR description using `#issue-number`
+     - Include branch name in PR title: `[issue-{number}] {description}`
 
 ## Memory Bank
 - Always read memory bank files at start of each session
@@ -52,16 +63,19 @@
 ## Product Management Process
 
 ### Artifacts
-- **PRDs (Product Requirement Documents):** Define feature requirements, user problems, jobs-to-be-done, and user journeys. One PRD per feature, stored in `docs/roadmap/product-requirements/`.
-- **Roadmap:** Prioritizes PRDs into Now, Next, and Future buckets. Single file in `docs/roadmap/roadmap.md`.
-- **CRDs (Change Request Documents):** Break down "Now" PRDs into actionable tasks for implementation. One CRD per active PRD, stored in `docs/roadmap/change-requests/`.
-- **Task Logs:** Keep daily logs of all tasks, grouped by status (in progress, on hold, to do, done, cancelled), stored in `docs/tasks/`.
+- **PRDs (Product Requirement Documents):** GitHub Issues with `prd` label defining feature requirements, user problems, jobs-to-be-done, and user journeys. One PRD per feature, stored as GitHub Issues (#100-#103).
+- **Roadmap:** GitHub Issues organized by labels (`phase-1`, `phase-2`, `phase-3`, `phase-4`) and milestones for sprint planning.
+- **CRDs (Change Request Documents):** GitHub Issues with `crd` and `epic` labels breaking down "Now" PRDs into actionable tasks. One CRD per active PRD, stored as GitHub Issues (#121-#124).
+- **Personal Task Logs:** Daily logs of individual work, grouped by status (in progress, on hold, to do, done, cancelled), stored in `docs/tasks/personal/{username}/`.
+- **Team Task Logs:** Sprint summaries and team coordination in `docs/tasks/team/`.
 - **ADRs (Architecture Decision Records):** Document significant technical decisions with context, consequences, and alternatives. Stored in `docs/adr/` with sequential numbering.
 
 ### Principles
-- All requirements and tasks are traceable through PRD, CRD, and Task Log.
-- Only PRDs in the "Now" bucket get CRDs and active tasks.
+- All requirements and tasks are traceable through GitHub Issues hierarchy: PRD → CRD → Personal Task.
+- Only PRDs in the "Now" bucket (current phase) get CRDs and active tasks.
 - All changes are documented and linked for full traceability.
+- Personal tasklogs are namespaced by username to prevent conflicts.
+- GitHub Issues provide team collaboration, automation, and integration.
 - The .cursorrules file is updated as the process evolves. 
 
 ## Architecture Patterns
