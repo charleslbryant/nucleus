@@ -165,3 +165,8 @@
 - Use proper directory navigation with cd commands separately
 - ALWAYS get current date and time from terminal using `date` command before writing dates or times to files or documentation
 - Never assume or guess dates - always verify with terminal first
+
+## Main Branch Protection
+- **Never push directly to `main`.**
+- All changes must be made in a feature branch and merged to `main` via a pull request.
+- This ensures code review, CI checks, and traceability for every change.
