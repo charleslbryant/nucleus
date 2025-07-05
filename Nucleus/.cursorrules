@@ -15,7 +15,8 @@
        - Always link personal tasks to GitHub Issues using `#issue-number`.
      - **Template Usage**: Use `docs/tasks/personal/tasklog-template.md` for new tasklogs.
    - **Branch Creation Protocol**: When starting work on a task:
-     - Check GitHub Issues for the task number
+     - **Every branch must have a corresponding GitHub Issue.**
+     - If no issue exists for the task, create one first, then create the branch.
      - Create feature branch: `feature/issue-{number}-{description}`
      - Example: `feature/issue-123-production-deployment`
      - Example: `feature/issue-124-authentication-system`
@@ -24,6 +25,10 @@
    - Create a plan in chat.
 2. **Execution:**
    - Work with the operator to execute the plan, updating personal task log and GitHub Issues as needed.
+   - **Commit often** with descriptive messages (use conventional commits when possible).
+   - **Always pull and merge main before pushing** (`git pull origin main`).
+   - **Resolve conflicts locally before pushing**.
+   - **Update task logs and documentation** to keep the team and GitHub in sync.
 3. **Recap Protocol (trigger: "recap"):**
    - **Review Memory Bank**: Read all memory bank files (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md) to understand current state
    - **Git Status**: Run `git status` to see all changes made during the session
@@ -59,6 +64,7 @@
      - Create pull request with detailed description of changes
      - Link related GitHub Issues in PR description using `#issue-number`
      - Include branch name in PR title: `[issue-{number}] {description}`
+     - **Delete feature branch after merge**
 
 ## Memory Bank
 - Always read memory bank files at start of each session
