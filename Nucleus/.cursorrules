@@ -57,9 +57,17 @@
      - Run `git add .` to stage all changes
      - Write descriptive commit message following conventional commits format
      - Run `git commit -m "commit message"`
+     - **Commit Strategy**: 
+       - During development: Commit often with descriptive messages
+       - Before PR: Squash commits to one comprehensive commit per feature
+       - Exception: Keep commits separate if they represent distinct logical changes that should be reviewed separately
    - **Remote Operations**:
      - If remote exists, run `git pull` to sync with remote changes first
      - Resolve any merge conflicts if they occur
+     - **Squash Commits**: Before creating PR, squash all commits in the feature branch to one commit
+       - Use `git rebase -i HEAD~{number-of-commits}` to squash commits
+       - Write a comprehensive commit message that describes the entire feature
+       - Force push the squashed branch: `git push origin {current-branch} --force-with-lease`
      - Run `git push origin {current-branch}` (use current feature branch)
      - Create pull request with detailed description of changes
      - Link related GitHub Issues in PR description using `#issue-number`
