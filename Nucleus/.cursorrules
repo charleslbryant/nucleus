@@ -4,11 +4,16 @@
 1. **Session Start (trigger: "let's go"):**
    - Review the memory bank (projectbrief.md, activeContext.md, progress.md, systemPatterns.md, techContext.md, productContext.md).
    - Review GitHub Issues: Check current PRDs (#100-#103), CRDs (#121-#124), and personal tasks (#125-#128).
-   - **Personal Task Log Protocol**: Check if today's task log exists in `docs/tasks/personal/{username}/tasklog-YYYY-MM-DD.md`.
-     - If no task log for today exists, create a new one using the template.
-     - Move all incomplete tasks (In Progress, On Hold, To Do) from the previous task log to today's task log.
-     - Keep completed tasks in the previous log's "Done" section.
-     - Always link personal tasks to GitHub Issues using `#issue-number`.
+   - **Personal Task Log Protocol**: 
+     - **Operator Identification**: Determine the current operator's username from the session context or user_info.
+     - **Namespace Protection**: Always work in `docs/tasks/personal/{current-operator-username}/` directory.
+     - **Never Cross-Contaminate**: Never modify tasklogs in other users' directories.
+     - **Daily Tasklog**: Check if today's task log exists in `docs/tasks/personal/{current-operator-username}/tasklog-YYYY-MM-DD.md`.
+       - If no task log for today exists, create a new one using the template.
+       - Move all incomplete tasks (In Progress, On Hold, To Do) from the previous task log to today's task log.
+       - Keep completed tasks in the previous log's "Done" section.
+       - Always link personal tasks to GitHub Issues using `#issue-number`.
+     - **Template Usage**: Use `docs/tasks/personal/tasklog-template.md` for new tasklogs.
    - **Branch Creation Protocol**: When starting work on a task:
      - Check GitHub Issues for the task number
      - Create feature branch: `feature/issue-{number}-{description}`
@@ -74,9 +79,18 @@
 - All requirements and tasks are traceable through GitHub Issues hierarchy: PRD → CRD → Personal Task.
 - Only PRDs in the "Now" bucket (current phase) get CRDs and active tasks.
 - All changes are documented and linked for full traceability.
-- Personal tasklogs are namespaced by username to prevent conflicts.
+- **Personal tasklogs are namespaced by username to prevent conflicts**.
+- **Each operator works only in their own directory**: `docs/tasks/personal/{operator-username}/`.
+- **Never modify other operators' tasklogs** to prevent data corruption.
 - GitHub Issues provide team collaboration, automation, and integration.
-- The .cursorrules file is updated as the process evolves. 
+- The .cursorrules file is updated as the process evolves.
+
+### Operator Namespace Protection
+- **Directory Structure**: `docs/tasks/personal/{operator-username}/tasklog-YYYY-MM-DD.md`
+- **Isolation**: Each operator has their own directory and tasklogs
+- **No Cross-Contamination**: Never read, write, or modify files in other operators' directories
+- **Template Usage**: All new tasklogs use `docs/tasks/personal/tasklog-template.md`
+- **Conflict Prevention**: Separate files prevent Git merge conflicts between operators 
 
 ## Architecture Patterns
 - **Clean Architecture**: Dependencies point inward toward Domain layer (see [architecture.md](docs/architecture.md))
