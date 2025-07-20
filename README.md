@@ -1,1 +1,1 @@
-*This repos is still very much experimental and messy. Use at your own risk.*
+*This repo is still very much experimental and messy. Things may be deleted or changed at any moment, sometimes daily. Use at your own risk and share what your thinking about in AI Engineering and AgenticOps.*
